@@ -5,12 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Demo
 {
-    public class BlobResponse {
-        [BlobOutput("output-container/output-file.txt", Connection = "AzureWebJobsStorage")]
-        public string BlobContent { get; set; }
+    public record Person(string name, int age);
+    public class BlobResponse
+    {
+        [BlobOutput("output-container/person.txt", Connection = "AzureWebJobsStorage")]
+        public Person BlobContent { get; set; }
 
         public HttpResponseData HttpResponseData { get; set; }
     }
+
     public class LogTimerFunction
     {
         private readonly ILogger _logger;
@@ -20,26 +23,17 @@ namespace Demo
             _logger = logger;
         }
 
-        [Function("LogTimeFunction")]
+        [Function("LogTimerFunction")]
         public BlobResponse Run(
         [TimerTrigger("*/5 * * * * *")] TimerInfo myTimer,
         FunctionContext executionContext)
         {
-             var response = new BlobResponse
+            var response = new BlobResponse
             {
-                BlobContent = "This is output to a blob!",
+                BlobContent = new Person("John", 18),
             };
 
             _logger.LogInformation("Data written to output blob");
-
-            if (myTimer.ScheduleStatus is not null)
-            {
-                _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
-            }
-            else
-            {
-                _logger.LogInformation("Schedule status information is unavailable.");
-            }
 
             return response;
         }
