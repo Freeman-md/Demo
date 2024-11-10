@@ -37,8 +37,6 @@ namespace Demo
                 _ => $"Hello, {name}! Have a great night!"
             };
 
-
-
             return await req.CreateStringResponseAsync(HttpStatusCode.OK, message);
         }
     }
