@@ -1,11 +1,12 @@
 using System;
+using Demo.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Demo
 {
-    public record Person(string name, int age);
+    
     public class BlobResponse
     {
         [BlobOutput("output-container/person.txt", Connection = "AzureWebJobsStorage")]
