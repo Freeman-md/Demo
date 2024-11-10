@@ -11,13 +11,15 @@ namespace Demo
     public class CosmoDBResponse
     {
         [CosmosDBOutput("DemoDB", "Demo",
-                Connection = "CosmosDbConnectionString", CreateIfNotExists = true)]
+                Connection = "CosmosDbConnectionString", PartitionKey = "demo", CreateIfNotExists = true)]
         public required MyDocument Document { get; set; }
         public HttpResponseData? HttpResponse { get; set; }
     }
     public class MyDocument
     {
         public required string id { get; set; }
+        public required string demo { get; set; }
+        
         public required string Name { get; set; }
         public required int Age { get; set; }
     }
@@ -48,6 +50,7 @@ namespace Demo
             return new CosmoDBResponse {
                 Document = new MyDocument {
                     id = Guid.NewGuid().ToString(),
+                    demo = "Demo1",
                     Name = person.name,
                     Age = person.age
                 }
